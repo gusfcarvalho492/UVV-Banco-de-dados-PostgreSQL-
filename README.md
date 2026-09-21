@@ -1,4 +1,4 @@
-# ⛽ AOP2 — Banco de Dados de Preços de Combustíveis
+# ⛽ AOP3 — Banco de Dados de Preços de Combustíveis
 
 Projeto desenvolvido para a disciplina de **Banco de Dados — ADS UVV**, dando continuidade à AOP1.
 
