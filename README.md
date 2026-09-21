@@ -1,57 +1,181 @@
-README - AOP2 Banco de Dados de Precos de Combustiveis
+# ⛽ AOP2 — Banco de Dados de Preços de Combustíveis
 
-Aluno: Gustavo Ferreira de Carvalho
-Disciplina: Banco de Dados - ADS UVV
-SGBD usado: PostgreSQL
+Projeto desenvolvido para a disciplina de **Banco de Dados — ADS UVV**, dando continuidade à AOP1.
 
-Sobre o trabalho
+> 🗄️ **SGBD:** PostgreSQL  
+> 👨‍💻 **Aluno:** Gustavo Ferreira de Carvalho  
+> 📍 **Região dos dados:** Serra/ES
 
-Esse trabalho e a continuacao da AOP1, onde fiz o diagrama conceitual do banco de precos de combustiveis. Aqui eu converti esse diagrama pro modelo logico e implementei o banco de verdade no PostgreSQL, com dados reais coletados na regiao de Serra/ES.
+---
 
-Arquivos que estao na entrega
+## 📌 Sobre o trabalho
 
-AOP2_PostgreSQL.sql - o script principal. Cria as tabelas, insere os dados e roda as 4 consultas pedidas no trabalho.
+Na AOP1 foi desenvolvido o **diagrama conceitual** do banco de preços de combustíveis.
 
-AOP2_Resultados_Consultas.xlsx - planilha com o resultado de cada consulta, uma aba pra cada uma. Isso e usado pra divulgar os precos pra comunidade, que e uma parte que o enunciado pede.
+Nesta etapa, o modelo foi convertido para o **modelo lógico** e implementado de fato no **PostgreSQL**, utilizando dados reais coletados na região de Serra/ES.
 
-Como rodar o script
+Além do banco, os resultados das consultas foram organizados em uma planilha para facilitar a divulgação dos preços.
 
-Precisa ter o PostgreSQL instalado. Primeiro cria um banco vazio:
+---
 
+## 📂 Arquivos
+
+| Arquivo | Descrição |
+|---|---|
+| `AOP2_PostgreSQL.sql` | 🐘 Script principal do banco. Cria as tabelas, insere os dados e executa as 4 consultas do trabalho. |
+| `AOP2_Resultados_Consultas.xlsx` | 📊 Planilha com os resultados das consultas, organizada em abas. |
+
+---
+
+## 🚀 Como executar
+
+É necessário ter o **PostgreSQL** instalado.
+
+### 1. Criar o banco
+
+```sql
 CREATE DATABASE precos_combustiveis;
+```
 
-Depois roda o script nesse banco, pelo terminal:
+### 2. Executar o script
 
+Pelo terminal:
+
+```bash
 psql -U seu_usuario -d precos_combustiveis -f AOP2_PostgreSQL.sql
+```
 
-As tabelas
+Depois disso, o banco estará criado com suas tabelas, dados e consultas.
 
-Fiz 3 tabelas, seguindo o que desenhei no conceitual da AOP1.
+---
 
-combustivel guarda os tipos de combustivel monitorados (gasolina comum, gasolina aditivada, etanol e diesel). E uma tabela pequena, só pra não ficar repetindo o nome do combustivel em cada linha de preço.
+## 🗃️ Estrutura do banco
 
-posto guarda os dados de cada posto: razao social, nome fantasia, CNPJ, bandeira e o endereço completo.
+O banco possui **3 tabelas**, seguindo o modelo desenvolvido na AOP1.
 
-coleta e a tabela principal. Cada linha ali e um preço que foi coletado, numa data, de um combustivel, em um posto. Ela se liga com as outras duas tabelas atraves de chave estrangeira (id_posto e id_combustivel).
+### ⛽ `combustivel`
 
-Pra manter a integridade eu usei chave primaria nas 3 tabelas, chave estrangeira ligando coleta com posto e combustivel, campos obrigatorios marcados como NOT NULL, e o CNPJ do posto como UNIQUE (não pode repetir).
+Armazena os tipos de combustível monitorados:
 
-Sobre os dados usados
+- Gasolina comum
+- Gasolina aditivada
+- Etanol
+- Diesel
 
-Peguei os precos direto da base aberta da ANP. Fiquei com 5 postos, em 4 bairros diferentes de Serra. São 4 tipos de combustivel e 5 coletas em datas diferentes pra cada combinação de posto e combustivel, dando 100 registros no total.
+A ideia é evitar repetir o nome do combustível em cada registro de preço.
 
-Um posto que eu tinha pego (Marlim Branco) acabou saindo do recorte final porque só tinha 2 registros na base, e o minimo pedido e 5. Tambem juntei Diesel S10 e Diesel S500 num tipo só de Diesel, pra bater com os 4 tipos que o enunciado pede.
+### 🏪 `posto`
 
-As consultas
+Armazena os dados dos postos:
 
-Consulta 1 pega o menor e o maior preço de cada combustivel, mostrando o posto, endereço, bairro e data de quando esse preço foi registrado. Se tiver empate no valor, aparece mais de uma linha.
+- Razão social
+- Nome fantasia
+- CNPJ
+- Bandeira
+- Endereço completo
 
-Consulta 2 mostra, pra cada posto e cada combustivel, quantas coletas tem e qual e o preço medio.
+### 📈 `coleta`
 
-Consulta 3 mostra so o preço mais recente de cada combustivel em cada posto, ou seja, o "preço atual".
+É a tabela principal do banco.
 
-Consulta 4 mostra a evolução do preço ao longo do tempo pra um combustivel especifico em um posto especifico, ordenado por data. No script deixei um exemplo fixo (gasolina comum no Auto Posto Lucas), mas dá pra trocar o posto e o combustivel direto no WHERE da consulta.
+Cada registro representa um **preço coletado**, relacionando:
 
-Sobre a planilha
+- Data da coleta
+- Combustível
+- Posto
+- Preço
 
-O enunciado pede pra disponibilizar os resultados pra comunidade tambem fora do banco, entao gerei essa planilha com o resultado de cada consulta, cada uma na sua aba. E a partir dela que da pra montar os graficos de evolução de preço pedidos na etapa de divulgação.
+A tabela se relaciona com `posto` e `combustivel` através das chaves estrangeiras `id_posto` e `id_combustivel`.
+
+### 🔐 Integridade dos dados
+
+Foram utilizadas:
+
+- 🔑 Chaves primárias nas 3 tabelas
+- 🔗 Chaves estrangeiras entre `coleta`, `posto` e `combustivel`
+- ✅ Campos obrigatórios com `NOT NULL`
+- 🆔 `UNIQUE` no CNPJ dos postos
+
+---
+
+## 📊 Dados utilizados
+
+Os preços foram obtidos diretamente da **base aberta da ANP**.
+
+O recorte final possui:
+
+- 🏪 **5 postos**
+- 📍 **4 bairros diferentes de Serra**
+- ⛽ **4 tipos de combustível**
+- 📅 **5 datas de coleta** para cada combinação de posto e combustível
+- 📦 **100 registros** no total
+
+Um dos postos inicialmente selecionados, **Marlim Branco**, foi retirado do recorte final porque possuía apenas 2 registros na base, enquanto o mínimo necessário era 5.
+
+Também foram agrupados **Diesel S10** e **Diesel S500** como um único tipo de **Diesel**, seguindo os 4 tipos de combustível definidos no enunciado.
+
+---
+
+## 🔎 Consultas
+
+O script possui 4 consultas principais:
+
+### 1️⃣ Menor e maior preço
+
+Mostra o **menor e o maior preço de cada combustível**, incluindo:
+
+- Posto
+- Endereço
+- Bairro
+- Data da coleta
+
+Em caso de empate, mais de uma linha pode ser retornada.
+
+### 2️⃣ Média por posto e combustível
+
+Mostra, para cada posto e combustível:
+
+- Quantidade de coletas
+- Preço médio
+
+### 3️⃣ Preço mais recente
+
+Mostra o registro mais recente de cada combustível em cada posto, representando o **preço atual dentro dos dados utilizados no projeto**.
+
+### 4️⃣ Evolução do preço
+
+Mostra a evolução do preço ao longo do tempo para um combustível específico em um posto específico, ordenada por data.
+
+No script existe um exemplo com:
+
+```text
+Gasolina comum
+Auto Posto Lucas
+```
+
+Os valores podem ser alterados diretamente no `WHERE` da consulta.
+
+---
+
+## 📊 Resultados e divulgação
+
+Os resultados das consultas também foram disponibilizados em:
+
+`AOP2_Resultados_Consultas.xlsx`
+
+A planilha possui **uma aba para cada consulta**, facilitando a visualização dos dados fora do banco.
+
+A partir desses resultados também foram montados os **gráficos de evolução de preços**, utilizados na etapa de divulgação do projeto.
+
+---
+
+## 🛠️ Tecnologias
+
+- 🐘 PostgreSQL
+- 🧮 SQL
+- 📊 Microsoft Excel
+- 📋 Dados abertos da ANP
+
+---
+
+> 📚 Projeto acadêmico desenvolvido para a disciplina de Banco de Dados — ADS UVV.
